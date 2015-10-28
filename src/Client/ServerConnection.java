@@ -33,7 +33,7 @@ public class ServerConnection extends Thread
     {
         try {
             username = name;
-            clientSocket = new Socket("10.111.176.157", 5556);
+            clientSocket = new Socket("localhost", 9898);
 
             outToServer = new ObjectOutputStream(clientSocket.getOutputStream());
             outToServer.writeObject("000|" + username);
