@@ -8,8 +8,10 @@ import java.net.SocketException;
 import java.util.ArrayList;
 
 /**
- * Created by NikolajKæmpe on 27-10-2015.
+ * Created by NikolajKï¿½mpe on 27-10-2015.
  */
+
+// test af steffen
 public class ServerConnection extends Thread
 {
     // Socket fields
@@ -133,15 +135,15 @@ public class ServerConnection extends Thread
                         break;
                     case "003" : // tabt ;
                         break;
-                    case "004" : // Træk
+                    case "004" : // Trï¿½k
                         break;
                     case "005" : medi.serverRequest5(textFromServer[1]);// Inviter ;
                         break;
                     case "006" : medi.serverRequest6(textFromServer[1]); // SpillerListe
                         break;
-                    case "007" : // Brugernavn optaget | Håndteres under oprettetsen;
+                    case "007" : // Brugernavn optaget | Hï¿½ndteres under oprettetsen;
                         break;
-                    case "008" : // Forbindelse oprettet - Håndteres under oprettetsen
+                    case "008" : // Forbindelse oprettet - Hï¿½ndteres under oprettetsen
                         break;
                     case "009" : // Accepter Invitation
                         break;
