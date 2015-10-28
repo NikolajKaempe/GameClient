@@ -5,10 +5,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
 
 /**
- * Created by NikolajK�mpe on 27-10-2015.
+ * Created by NikolajKæmpe on 27-10-2015.
  */
 public class ServerConnection extends Thread
 {
@@ -27,11 +26,17 @@ public class ServerConnection extends Thread
         this.medi = medi;
     }
 
+    /**
+     * @author EmilMadsen & NikolajKæmpe
+     * This method tries to connect to the server.
+     * If this is possible, it will open the FrontPageGUI
+     * Otherwise it will inform the user on the LoginGUI that a connect wasent possible
+     */
     public void tryConnection( String name)
     {
         try {
             username = name;
-            clientSocket = new Socket("10.111.176.157", 5556);
+            clientSocket = new Socket("10.111.176.138", 9898);
 
             outToServer = new ObjectOutputStream(clientSocket.getOutputStream());
             outToServer.writeObject("000|" + username);
@@ -54,8 +59,8 @@ public class ServerConnection extends Thread
                 medi.activateFrontPageGui();
                 System.out.println("WE HAVE CONNECTED");
                 this.run();
-
             }
+
             else if (textFromServer[0].equals("007"))
             {
                 medi.setWarningLabel("Username not avaliable");
@@ -71,7 +76,12 @@ public class ServerConnection extends Thread
 
     }
 
-
+    /**
+     * @author EmilMadsen & NikolajKæmpe
+     * this methid tries to write to the server, to request an game invite to another chosen client
+     * @param opponentID - The Id of the Opponent that is to be invited to a game.
+     * @param gameType - The type of the game that client wish to play.
+     */
     public void inviteClient(String opponentID, String gameType)
     {
         // Client ask server to be connected to another client
@@ -81,9 +91,15 @@ public class ServerConnection extends Thread
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
+    /**
+     * @author EmilMadsen & NikolajKæmpe
+     * This method calls the server, to accept an invite from another client
+     * @param afID - the id of the client who sent the game invite
+     * @param moID - the od of this client, who have been invited
+     * @param gameType - the type of the game requested to be played
+     */
     public void acceptInvite(String afID, String moID, String gameType){
         // Client writes to server to accept.
         try {
@@ -94,6 +110,11 @@ public class ServerConnection extends Thread
         }
     }
 
+    /**
+     * @author EmilMadsen & NikolajKæmpe
+     * This method calls the server, to decline an invite from another client
+     * @param afID - the id of the client who sent the game invite
+     */
     public void declineInvite(String afID){
         // Client writes to server to decline.
         try {
@@ -115,11 +136,16 @@ public class ServerConnection extends Thread
         // activate FrontPageGUI;
     }
 
+    /**
+     * This method listens to the server in a thread.
+     * Depending on the status code, it will call the right method in the Mediator class.
+     */
     @Override
     public void run()
     {
         while(running)
         {
+            System.out.println("Starting work");
             try {
                 clearTextFromServer = (String) inFromServer.readObject();
 
@@ -133,24 +159,23 @@ public class ServerConnection extends Thread
                         break;
                     case "003" : // tabt ;
                         break;
-                    case "004" : // Tr�k
+                    case "004" : // Træk
                         break;
                     case "005" : medi.serverRequest5(textFromServer[1]);// Inviter ;
                         break;
                     case "006" : medi.serverRequest6(textFromServer[1]); // SpillerListe
                         break;
-                    case "007" : // Brugernavn optaget | H�ndteres under oprettetsen;
+                    case "007" : // Brugernavn optaget | Håndteres under oprettetsen;
                         break;
-                    case "008" : // Forbindelse oprettet - H�ndteres under oprettetsen
+                    case "008" : // Forbindelse oprettet - Håndteres under oprettetsen
                         break;
                     case "009" : // Accepter Invitation
                         break;
                 }
 
             }catch (SocketException socEx){running = false;}
-            catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            catch (IOException e) {running = false;}
+            catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }

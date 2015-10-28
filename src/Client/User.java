@@ -1,7 +1,7 @@
 package Client;
 
 /**
- * Created by NikolajKæmpe on 27-10-2015.
+ * Created by NikolajKÃ¦mpe on 27-10-2015.
  */
 public class User
 {
