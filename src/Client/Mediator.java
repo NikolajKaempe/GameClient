@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 /**
- * Created by NikolajKæmpe on 26-10-2015.
+ * Created by NikolajKÃ¦mpe on 26-10-2015.
  */
 
 public class Mediator extends Application
@@ -30,7 +30,7 @@ public class Mediator extends Application
 
 
     /**
-     * @author EmilMadsen & NikolajKæmpe
+     * @author EmilMadsen & NikolajKÃ¦mpe
      * This is the Constructor.
      * It initializes the needed information
      */
@@ -52,12 +52,6 @@ public class Mediator extends Application
         serverConnection.tryConnection(username);
         this.username = username;
     }
-
-    /**
-     * @author EmilMadsen & NikolajKæmpe
-     * This method tries to connect to the server.
-     * If
-     */
 
     public void setWarningLabel(String message)
     {
@@ -128,6 +122,7 @@ public class Mediator extends Application
 
     public void serverRequest5(String message)
     {
+        System.out.println("REQUEST 5");
         if(!inGame)
         {
             String[] invInfo = message.split(",");
@@ -153,18 +148,22 @@ public class Mediator extends Application
     }
     public void serverRequest6(String message)
     {
-        userList = new ArrayList<User>();
+        System.out.println("REQUEST 6");
+        userList = new ArrayList<>();
+        System.out.println(message);
         String[] tempInfo = message.split(",");
 
         for (int i = 0; i < tempInfo.length ; i++)
         {
-            String[] userInfo = tempInfo[i].split(".");
+            System.out.println(tempInfo[0]);
+            String[] userInfo = tempInfo[i].split("\\.");
 
             if(!userInfo[0].equals(id))
             {
                 userList.add(new User(userInfo[1],userInfo[0]));
             }
         }
+
         if (inGame == false)
         {
             guiFrontpageController.updateUserList(userList);
