@@ -49,6 +49,12 @@ public class GuiFrontpageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+
+        System.out.println("test"+medi.getId());
+
+
+
+
         btn_tickTackToe.setToggleGroup(toggleGroup);
         btn_walkingDead.setToggleGroup(toggleGroup);
         btn_wow.setToggleGroup(toggleGroup);
@@ -93,10 +99,17 @@ public class GuiFrontpageController implements Initializable {
                 System.out.println("Du har valgt spiller: " +list_players.getSelectionModel().getSelectedItem().toString() +"\nDu har valgt at spille: "+toggleGroup.getSelectedToggle().getUserData());
                 String gameType = (String) toggleGroup.getSelectedToggle().getUserData();
                 int opponentID = list_players.getSelectionModel().getSelectedIndex();
+                String selectedPlayer = list_players.getSelectionModel().getSelectedItem().toString();
+
+
+                System.out.println("test12 "+medi.getId());
+                System.out.println("test13 "+selectedPlayer);
 
 
 
-                medi.inviteClient(opponentID,gameType);
+                if(!medi.getId().equals(medi.findIdByUseranme(selectedPlayer))) {
+                    medi.inviteClient(opponentID, gameType);
+                }
                 // add items to listview
             }
             else
@@ -105,15 +118,6 @@ public class GuiFrontpageController implements Initializable {
             }
 
         });
-
-        // get selected value form listview
-        list_players.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        System.out.println("ListView selection changed from oldValue = "
-                        + oldValue + " to newValue = " + newValue);
-            }
-         });
 
     }
 

@@ -63,6 +63,13 @@ public class StatusListener extends Thread {
                         //System.out.println("accepter invitation test"); // Accepter Invitation
                         mediator.serverRequest9(textFromServer[1]);
                         break;
+                    case "010" :
+                        //System.out.println(textFromServer[1]);
+                        mediator.serverRequest10(textFromServer[1]);
+                        break;
+                    case "011" :
+                        mediator.serverRequest11(textFromServer[1]);
+                        break;
                 }
                 //System.out.println(this.isAlive());
             }catch (SocketException socEx){

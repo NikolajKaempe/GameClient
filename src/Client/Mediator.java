@@ -23,6 +23,7 @@ public class Mediator extends Application
     private Stage primaryStage;
     private GuiLoginController guiLoginController;
     private GuiFrontpageController guiFrontpageController;
+    private GuiTicTacToeController guiTicTacToeController;
     private ServerConnection serverConnection;
     private ArrayList<User> userList;
     private String username;
@@ -106,8 +107,37 @@ public class Mediator extends Application
         primaryStage.show();
 
     }
-    public void activateGameGui()
+    public void activateGameGui(String gametype, String opponentId, String ownId)
     {
+        FXMLLoader tictactoeLoader = new FXMLLoader();
+
+        System.out.println(ownId);
+        System.out.println(opponentId);
+
+        switch (gametype) {
+
+            case "tictactoe":
+                guiTicTacToeController = new GuiTicTacToeController(primaryStage,this,opponentId,ownId);
+
+                tictactoeLoader.setController(guiTicTacToeController);
+                tictactoeLoader.setLocation(getClass().getResource("TicTacToe.fxml"));
+
+                break;
+
+        }
+
+        if(tictactoeLoader.getLocation() == null || tictactoeLoader.getController() == null) return;
+
+        Parent root3 = null;
+
+        try {
+            root3 = tictactoeLoader.load();
+        } catch (IOException e) {e.printStackTrace();
+        }
+
+        primaryStage.setScene(new Scene(root3));
+
+        primaryStage.show();
 
     }
 
@@ -147,12 +177,18 @@ public class Mediator extends Application
 
                     Optional<ButtonType> result = alert.showAndWait();
                     if (result.get() == ButtonType.OK){
+                        // 0 - afsender
+                        // 1- mod
+                        // 2 - spil
                         serverConnection.acceptInvite(invInfo[2], invInfo[0], invInfo[1]);
                         inGame = true;
+
+                        activateGameGui(invInfo[1],invInfo[2],invInfo[0]);
+
                         // TODO Open Game
                     } else {
                         // Return to lobby
-                        serverConnection.declineInvite(invInfo[2]);
+                        serverConnection.declineInvite(invInfo[0]);
                         //TODO return to lobby by closing AlertPane?
                     }
                 }
@@ -175,19 +211,21 @@ public class Mediator extends Application
             String[] userInfo = tempInfo[i].split("\\.");
 
 
-            //if sentence not working correctly
-            if(!userInfo[0].equals(id))
-            {
+            //if(!userInfo[0].equals(id))
+            //{
                 userList.add(new User(userInfo[1],userInfo[0]));
                 //System.out.println("test " +userList.size());
 
-            }
+            //}
         }
+
+        //System.out.println("test1: "+userList.size());
 
         if (inGame == false)
         {
             guiFrontpageController.updateUserList(userList);
         }
+        //System.out.println("test2: "+userList.size());
     }
 
     public void serverRequest7(String message)
@@ -201,8 +239,52 @@ public class Mediator extends Application
 
      public void serverRequest9(String message)
      {
-         System.out.println("request 9: "+message);
+
+         String[] tempInfo = message.split(",");
+
+         System.out.println("REQUEST 9");
+
+         System.out.println(message);
+
+         Platform.runLater(new Runnable() {
+
+             public void run() {
+                 activateGameGui(tempInfo[2], tempInfo[1], tempInfo[0]);
+             }
+         });
+
+
+
      }
+
+    public void serverRequest10(String message) {
+
+        System.out.println("REQUEST 10");
+
+        System.out.println(message);
+
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Game Rejected!");
+                alert.setHeaderText(null);
+                alert.setContentText("Player "+ findUsername(message) +" have declined your invite.");
+                alert.showAndWait();
+
+
+
+        }
+        });
+    }
+
+    public void serverRequest11(String message) {
+
+        System.out.println("REQUEST 11");
+
+        System.out.println(message);
+    }
 
     public void inviteClient(int opponentListID, String gameType)
     {
@@ -216,6 +298,10 @@ public class Mediator extends Application
         this.id = id;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public String findUsername(String id)
     {
         for (User user : userList)
@@ -223,6 +309,15 @@ public class Mediator extends Application
             if(id.equals(user.getID()))
             {
                 return user.getName();
+            }
+        }
+        return "0";
+    }
+
+    public String findIdByUseranme(String username) {
+        for (User user : userList) {
+            if (username.equals(user.getName())) {
+                return user.getID();
             }
         }
         return "0";
