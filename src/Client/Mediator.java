@@ -1,6 +1,7 @@
 package Client;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -42,7 +43,15 @@ public class Mediator extends Application
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+
         this.primaryStage = primaryStage;
+
+        //close on exit
+        primaryStage.setOnCloseRequest(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
+
         activateLoginGui();
 
     }
@@ -128,21 +137,28 @@ public class Mediator extends Application
             String[] invInfo = message.split(",");
             String opponentName = findUsername(invInfo[2]);
 
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Game Invite!");
-            alert.setHeaderText("Player " + opponentName + " have challenged you to a game of " + invInfo[1] + ".");
-            alert.setContentText("Are you ok with this?");
+            Platform.runLater(new Runnable() {
 
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK){
-                serverConnection.acceptInvite(invInfo[2], invInfo[0], invInfo[1]);
-                inGame = true;
-                // TODO Open Game
-            } else {
-                // Return to lobby
-                serverConnection.declineInvite(invInfo[2]);
-                //TODO return to lobby by closing AlertPane?
-            }
+                public void run() {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Game Invite!");
+                    alert.setHeaderText("Player " + opponentName + " have challenged you to a game of " + invInfo[1] + ".");
+                    alert.setContentText("Are you ok with this?");
+
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK){
+                        serverConnection.acceptInvite(invInfo[2], invInfo[0], invInfo[1]);
+                        inGame = true;
+                        // TODO Open Game
+                    } else {
+                        // Return to lobby
+                        serverConnection.declineInvite(invInfo[2]);
+                        //TODO return to lobby by closing AlertPane?
+                    }
+                }
+            });
+
+
         }
 
     }
@@ -155,12 +171,16 @@ public class Mediator extends Application
 
         for (int i = 0; i < tempInfo.length ; i++)
         {
-            System.out.println(tempInfo[0]);
+            //System.out.println(tempInfo[0]);
             String[] userInfo = tempInfo[i].split("\\.");
 
+
+            //if sentence not working correctly
             if(!userInfo[0].equals(id))
             {
                 userList.add(new User(userInfo[1],userInfo[0]));
+                //System.out.println("test " +userList.size());
+
             }
         }
 
@@ -181,7 +201,7 @@ public class Mediator extends Application
 
      public void serverRequest9(String message)
      {
-
+         System.out.println("request 9: "+message);
      }
 
     public void inviteClient(int opponentListID, String gameType)

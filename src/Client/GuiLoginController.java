@@ -64,6 +64,7 @@ public class GuiLoginController implements Initializable {
 
             if(!msg.equalsIgnoreCase("") && !msg.equalsIgnoreCase(null)) {
 
+
                medi.tryConnectToServer(msg);
 
             }

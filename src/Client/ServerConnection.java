@@ -60,7 +60,8 @@ public class ServerConnection extends Thread
 
                 medi.activateFrontPageGui();
                 System.out.println("WE HAVE CONNECTED");
-                this.run();
+                StatusListener statusListener = new StatusListener(medi, inFromServer);
+                statusListener.start();
             }
 
             else if (textFromServer[0].equals("007"))
@@ -89,6 +90,7 @@ public class ServerConnection extends Thread
         // Client ask server to be connected to another client
         try {
             outToServer.writeObject("005|"+opponentID+","+gameType+","+id);
+            System.out.println("005|"+opponentID+","+gameType+","+id);
             outToServer.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -142,16 +144,18 @@ public class ServerConnection extends Thread
      * This method listens to the server in a thread.
      * Depending on the status code, it will call the right method in the Mediator class.
      */
-    @Override
-    public void run()
-    {
-        while(running)
-        {
-            System.out.println("Starting work");
+
+    public void run() {
+        while (running) {
+
             try {
+
+                //System.out.println("test1223332");
                 clearTextFromServer = (String) inFromServer.readObject();
 
                 textFromServer = clearTextFromServer.split("\\|");
+
+                System.out.println(textFromServer[0]);
 
                 switch (textFromServer[0])
                 {
@@ -171,16 +175,22 @@ public class ServerConnection extends Thread
                         break;
                     case "008" : // Forbindelse oprettet - Håndteres under oprettetsen
                         break;
-                    case "009" : // Accepter Invitation
+                    case "009" :
+                        //System.out.println("accepter invitation test"); // Accepter Invitation
+                        medi.serverRequest9(textFromServer[1]);
                         break;
                 }
-
-            }catch (SocketException socEx){running = false;}
-            catch (IOException e) {running = false;}
-            catch (ClassNotFoundException e) {
+                //System.out.println(this.isAlive());
+            }catch (SocketException socEx){
+                running = false;
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
+
         }
+
     }
 
 }

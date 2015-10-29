@@ -56,7 +56,7 @@ public class GuiFrontpageController implements Initializable {
 
 
         //set game names to togglebuttons
-        btn_tickTackToe.setUserData("TickTackToe");
+        btn_tickTackToe.setUserData("tictactoe");
         btn_walkingDead.setUserData("Game 2");
         btn_wow.setUserData("Game 3");
         btn_yatzy.setUserData("Game 4");
@@ -81,8 +81,6 @@ public class GuiFrontpageController implements Initializable {
 
         // Demo data for listview
         // Demo
-        ObservableList<String> items = FXCollections.observableArrayList("A", "B", "C", "D","A", "B", "C", "D","A", "B", "C", "D");
-        list_players.setItems(items);
 
         //make sure a player and game is selected
         btn_invite.setOnAction(event -> {
@@ -92,8 +90,11 @@ public class GuiFrontpageController implements Initializable {
             {
                 //get selected togglebutton
 
+                System.out.println("Du har valgt spiller: " +list_players.getSelectionModel().getSelectedItem().toString() +"\nDu har valgt at spille: "+toggleGroup.getSelectedToggle().getUserData());
                 String gameType = (String) toggleGroup.getSelectedToggle().getUserData();
                 int opponentID = list_players.getSelectionModel().getSelectedIndex();
+
+
 
                 medi.inviteClient(opponentID,gameType);
                 // add items to listview
@@ -119,7 +120,9 @@ public class GuiFrontpageController implements Initializable {
     public void updateUserList(ArrayList<User> userList)
     {
 
+
         String[] usernames = new String[userList.size()];
+
 
         for(int i = 0; i < usernames.length;i++)
         {
@@ -127,6 +130,13 @@ public class GuiFrontpageController implements Initializable {
         }
 
         ObservableList<String> items = FXCollections.observableArrayList(usernames);
-        list_players.setItems(items);
+
+        Platform.runLater(new Runnable() {
+
+            public void run() {
+                list_players.setItems(items);
+            }
+        });
+
     }
 }
