@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -76,6 +77,9 @@ public class GuiTicTacToeController implements Initializable {
     private Mediator mediator;
     private String opponentId;
     private String ownId;
+    private Boolean myTurn = false;
+    private ArrayList<Button> boardButtons;
+    private int[] boardValues;
 
     Image image = new Image(getClass().getResourceAsStream("cross.png"));
     Image image2 = new Image(getClass().getResourceAsStream("circle.png"));
@@ -88,6 +92,7 @@ public class GuiTicTacToeController implements Initializable {
         this.ownId = ownId;
         System.out.println("opp id : " + opponentId);
         System.out.println("own id: " + ownId);
+        boardButtons = new ArrayList<Button>();
     }
 
     @Override
@@ -102,41 +107,63 @@ public class GuiTicTacToeController implements Initializable {
 
         imageView_right.setImage(image2);
 
+        boardButtons.add(btn_1);
+        boardButtons.add(btn_2);
+        boardButtons.add(btn_3);
+        boardButtons.add(btn_4);
+        boardButtons.add(btn_5);
+        boardButtons.add(btn_6);
+        boardButtons.add(btn_7);
+        boardButtons.add(btn_8);
+        boardButtons.add(btn_9);
+
+
+
         btn_1.setOnAction(event -> {
-            paintButtons(btn_1);
-            disableButtons(btn_1);
+            if(myTurn && boardValues[0]==0){
+                mediator.makeMove(0);
+                System.out.println("Click!!");
+            }
         });
         btn_2.setOnAction(event -> {
-            paintButtons(btn_2);
-            disableButtons(btn_2);
+            if(myTurn && boardValues[1]==0){
+                mediator.makeMove(1);
+            }
         });
         btn_3.setOnAction(event -> {
-            paintButtons(btn_3);
-            disableButtons(btn_3);
+            if(myTurn && boardValues[2]==0){
+                mediator.makeMove(2);
+            }
         });
         btn_4.setOnAction(event -> {
-            paintButtons(btn_4);
-            disableButtons(btn_4);
+            if(myTurn && boardValues[3]==0){
+                mediator.makeMove(3);
+            }
         });
         btn_5.setOnAction(event -> {
-            paintButtons(btn_5);
-            disableButtons(btn_5);
+            if(myTurn && boardValues[4]==0){
+                mediator.makeMove(4);
+            }
         });
         btn_6.setOnAction(event -> {
-            paintButtons(btn_6);
-            disableButtons(btn_6);
+            if(myTurn && boardValues[5]==0){
+                mediator.makeMove(5);
+            }
         });
         btn_7.setOnAction(event -> {
-            paintButtons(btn_7);
-            disableButtons(btn_7);
+            if(myTurn && boardValues[6]==0){
+                mediator.makeMove(6);
+            }
         });
         btn_8.setOnAction(event -> {
-            paintButtons(btn_8);
-            disableButtons(btn_8);
+            if(myTurn && boardValues[7]==0){
+                mediator.makeMove(7);
+            }
         });
         btn_9.setOnAction(event -> {
-            paintButtons(btn_9);
-            disableButtons(btn_9);
+            if(myTurn && boardValues[8]==0){
+                mediator.makeMove(8);
+            }
         });
 
         btn_playAgain.setOnAction(event -> {
@@ -150,32 +177,66 @@ public class GuiTicTacToeController implements Initializable {
             mediator.serverRequest1(opponentId);
         });
 
-
-
     }
-
+/*
     private void disableButtons(Button btn) {
         btn.setDisable(true);
         btn.setOpacity(1);
     }
+*/
 
-    private void clearBoard() {
+    public void updateGameBoard(String gameState) {
+
+        boardValues = new int[9];
+        String[] input = gameState.split(",");
+        String turnID = input[0];
+        String gameBody = input[1];
+
+        if (turnID.equals(ownId)) {
+            myTurn = true;
+        } else {
+            myTurn = false;
+        }
+
+        String[] positionValues = gameBody.split("\\.");
+
+        for (int i = 0; i < positionValues.length; i++) {
+            String s = ""+positionValues[i].charAt(2);
+            int value = Integer.parseInt(s);
+            if(value == 2) {
+                boardValues[i] = 2;
+                paintButtons(i,2);
+            }
+            else if (value == 1){
+                boardValues[i] = 1;
+                paintButtons(i,1);
+            }
+            else{
+                boardValues[i] = 0;
+                // Draw Nothing
+            }
+
+        }
 
     }
 
+
     private void highlightWinStreak(int one, int two, int three){
-
-        switch ( one ) {
-
-        }
 
         btn_1.setStyle("-fx-base: #48e732;");
     }
 
-    private void paintButtons(Button btn) {
+    private void paintButtons(int btn, int type) {
 
-        btn.setGraphic(new ImageView(image));
-        btn.setGraphic(new ImageView(image2));
+        if (type == 1) {
+            boardButtons.get(btn).setGraphic(new ImageView(image));
+
+        } else if (type == 2) {
+            boardButtons.get(btn).setGraphic(new ImageView(image2));
+        } else {
+            // do nothing
+        }
+
     }
 
 

@@ -32,8 +32,6 @@ public class StatusListener extends Thread {
     public void run() {
         while (check) {
 
-            System.out.println("running true");
-
             try {
 
                 //System.out.println("test1223332");

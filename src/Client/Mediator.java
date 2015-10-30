@@ -297,9 +297,9 @@ public class Mediator extends Application
                  //  1 opponent
                  //  2 ownid
 
-                 System.out.println("gametype: "+tempInfo[2]);
-                 System.out.println("opponent: "+tempInfo[1]);
-                 System.out.println("ownid: "+tempInfo[0]);
+                 System.out.println("gametype: " + tempInfo[2]);
+                 System.out.println("opponent: " + tempInfo[1]);
+                 System.out.println("ownid: " + tempInfo[0]);
                  activateGameGui(tempInfo[2], tempInfo[1], tempInfo[0]);
              }
          });
@@ -321,7 +321,7 @@ public class Mediator extends Application
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Game Rejected!");
                 alert.setHeaderText(null);
-                alert.setContentText("Player "+ findUsername(message) +" have declined your invite.");
+                alert.setContentText("Player " + findUsername(message) + " have declined your invite.");
                 alert.showAndWait();
 
 
@@ -393,4 +393,7 @@ public class Mediator extends Application
         launch();
     }
 
+    public void makeMove(int i) {
+        serverConnection.move(i+"");
+    }
 }
