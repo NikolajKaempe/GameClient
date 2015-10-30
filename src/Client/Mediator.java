@@ -145,14 +145,17 @@ public class Mediator extends Application
     {
 
     }
-    public void serverRequest2(String message)
-    {
 
+    // Win
+    public void serverRequest2()
+    {
+        guiTicTacToeController.win();
     }
 
-    public void serverRequest3(String message)
+    // Lose
+    public void serverRequest3()
     {
-
+        guiTicTacToeController.lose();
     }
     public void serverRequest4(String message)
     {
@@ -294,6 +297,11 @@ public class Mediator extends Application
 
     }
 
+    // Draw
+    public void serverRequest12() {
+        guiTicTacToeController.draw();
+    }
+
     public void makeMove(int move)
     {
         System.out.println("move = " + move);
@@ -337,15 +345,14 @@ public class Mediator extends Application
         }
         return "0";
     }
-
     public static void main(String[] args)
     {
         Mediator m = new Mediator();
         m.startProgram();
     }
+
     private static void startProgram()
     {
         launch();
     }
-
 }

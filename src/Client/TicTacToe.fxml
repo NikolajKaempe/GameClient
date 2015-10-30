@@ -53,7 +53,7 @@
                   <Insets left="10.0" />
                </GridPane.margin>
             </Label>
-            <Label id="leftScore" fx:id="label_leftScore" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="56.0" text="1" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Label id="leftScore" fx:id="label_leftScore" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="56.0" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
             <Label id="rightScore" fx:id="label_rightScore" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="56.0" text="0" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
             <Label fx:id="lbl_rightName" alignment="BASELINE_RIGHT" prefHeight="17.0" prefWidth="120.0" text="" GridPane.columnIndex="5">
                <GridPane.margin>
