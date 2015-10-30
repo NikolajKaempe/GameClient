@@ -111,9 +111,6 @@ public class Mediator extends Application
     {
         FXMLLoader tictactoeLoader = new FXMLLoader();
 
-        System.out.println(ownId);
-        System.out.println(opponentId);
-
         switch (gametype) {
 
             case "tictactoe":
@@ -144,6 +141,49 @@ public class Mediator extends Application
     public void serverRequest1(String message)
     {
 
+
+
+        if(!inGame) return;
+        System.out.println("Request 1");
+        System.out.println(message);
+        serverConnection.exitGame(message);
+        inGame = false;
+
+
+        Platform.runLater(new Runnable() {
+
+            public void run() {
+
+
+                activateFrontPageGui();
+                guiFrontpageController.updateUserList(userList);
+                if(!message.equals(id)) return;
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("You won the game");
+                alert.setHeaderText(null);
+                alert.setContentText("You won :)");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK){
+                    //activateFrontPageGui();
+                    //guiFrontpageController.updateUserList(userList);
+                }
+
+                else {
+                    // do nothing
+                }
+
+
+
+            }
+
+        });
+
+
+
+
+
+
     }
     public void serverRequest2(String message)
     {
@@ -162,6 +202,9 @@ public class Mediator extends Application
     public void serverRequest5(String message)
     {
         System.out.println("REQUEST 5");
+
+        System.out.println("test3: " +isInGame());
+
         if(!inGame)
         {
             String[] invInfo = message.split(",");
@@ -182,6 +225,12 @@ public class Mediator extends Application
                         // 2 - spil
                         serverConnection.acceptInvite(invInfo[2], invInfo[0], invInfo[1]);
                         inGame = true;
+
+
+
+                        //  0 gametype
+                        //  1 opponent
+                        //  2 ownid
 
                         activateGameGui(invInfo[1],invInfo[2],invInfo[0]);
 
@@ -210,7 +259,6 @@ public class Mediator extends Application
             //System.out.println(tempInfo[0]);
             String[] userInfo = tempInfo[i].split("\\.");
 
-
             //if(!userInfo[0].equals(id))
             //{
                 userList.add(new User(userInfo[1],userInfo[0]));
@@ -219,15 +267,12 @@ public class Mediator extends Application
             //}
         }
 
-        //System.out.println("test1: "+userList.size());
 
         if (inGame == false)
         {
             guiFrontpageController.updateUserList(userList);
         }
-        //System.out.println("test2: "+userList.size());
     }
-
     public void serverRequest7(String message)
     {
 
@@ -244,11 +289,17 @@ public class Mediator extends Application
 
          System.out.println("REQUEST 9");
 
-         System.out.println(message);
-
          Platform.runLater(new Runnable() {
 
              public void run() {
+                 inGame = true;
+                 //  0 gametype
+                 //  1 opponent
+                 //  2 ownid
+
+                 System.out.println("gametype: "+tempInfo[2]);
+                 System.out.println("opponent: "+tempInfo[1]);
+                 System.out.println("ownid: "+tempInfo[0]);
                  activateGameGui(tempInfo[2], tempInfo[1], tempInfo[0]);
              }
          });
@@ -298,8 +349,17 @@ public class Mediator extends Application
         this.id = id;
     }
 
+    public boolean isInGame() {
+        return inGame;
+    }
+
     public String getId() {
         return id;
+    }
+
+
+    public void setInGame(boolean inGame) {
+        this.inGame = inGame;
     }
 
     public String findUsername(String id)

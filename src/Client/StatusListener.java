@@ -32,18 +32,20 @@ public class StatusListener extends Thread {
     public void run() {
         while (check) {
 
+            System.out.println("running true");
+
             try {
 
                 //System.out.println("test1223332");
                 clearTextFromServer = (String) objectInputStream.readObject();
-
                 textFromServer = clearTextFromServer.split("\\|");
 
-                System.out.println(textFromServer[0]);
+                //System.out.println(textFromServer[0]);
 
                 switch (textFromServer[0])
                 {
-                    case "001" : // Forladt spil;
+                    case "001" :
+                        mediator.serverRequest1(textFromServer[1]);// Forladt spil;
                         break;
                     case "002" : // Vundet
                         break;
@@ -74,10 +76,10 @@ public class StatusListener extends Thread {
                 //System.out.println(this.isAlive());
             }catch (SocketException socEx){
                 check = false;
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+            } catch (ClassNotFoundException | EOFException e) {
+                check = false;
             } catch (IOException e) {
-                e.printStackTrace();
+                check = false;
             }
 
         }

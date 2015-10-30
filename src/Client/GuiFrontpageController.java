@@ -50,9 +50,6 @@ public class GuiFrontpageController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
 
-        System.out.println("test"+medi.getId());
-
-
 
 
         btn_tickTackToe.setToggleGroup(toggleGroup);
@@ -96,18 +93,16 @@ public class GuiFrontpageController implements Initializable {
             {
                 //get selected togglebutton
 
-                System.out.println("Du har valgt spiller: " +list_players.getSelectionModel().getSelectedItem().toString() +"\nDu har valgt at spille: "+toggleGroup.getSelectedToggle().getUserData());
+                //System.out.println("Du har valgt spiller: " +list_players.getSelectionModel().getSelectedItem().toString() +"\nDu har valgt at spille: "+toggleGroup.getSelectedToggle().getUserData());
                 String gameType = (String) toggleGroup.getSelectedToggle().getUserData();
                 int opponentID = list_players.getSelectionModel().getSelectedIndex();
                 String selectedPlayer = list_players.getSelectionModel().getSelectedItem().toString();
 
 
-                System.out.println("test12 "+medi.getId());
-                System.out.println("test13 "+selectedPlayer);
-
 
 
                 if(!medi.getId().equals(medi.findIdByUseranme(selectedPlayer))) {
+                    //System.out.println("invite sent to player");
                     medi.inviteClient(opponentID, gameType);
                 }
                 // add items to listview

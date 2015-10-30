@@ -68,6 +68,11 @@ public class ServerConnection extends Thread
             {
                 medi.setWarningLabel("Username not avaliable");
             }
+            else if (textFromServer[0].equals("001"))
+            {
+                System.out.println("serverconnection");
+
+            }
             else
             {
                 System.out.println("Didn't connect");
@@ -134,16 +139,26 @@ public class ServerConnection extends Thread
 
         try {
             outToServer.writeObject("011|"+body);
+            outToServer.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
         // Calls the server with the current move.
     }
 
-    public void exitGame()
+    public void exitGame(String opponentId)
     {
         // Disconnect from current game. Send info til server.
         // activate FrontPageGUI;
+
+        try {
+            outToServer.writeObject("001|"+opponentId);
+            outToServer.flush();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

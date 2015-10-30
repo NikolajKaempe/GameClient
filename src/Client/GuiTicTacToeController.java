@@ -86,10 +86,14 @@ public class GuiTicTacToeController implements Initializable {
         this.mediator = mediator;
         this.opponentId = opponentId;
         this.ownId = ownId;
+        System.out.println("opp id : " + opponentId);
+        System.out.println("own id: " + ownId);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        System.out.println("test1: "+mediator.isInGame());
 
         lbl_leftName.setText(mediator.findUsername(ownId));
         lbl_rightName.setText(mediator.findUsername(opponentId));
@@ -136,10 +140,14 @@ public class GuiTicTacToeController implements Initializable {
         });
 
         btn_playAgain.setOnAction(event -> {
+
+            System.out.println("333");
         });
 
         btn_quitGame.setOnAction(event -> {
-            mediator.activateFrontPageGui();
+
+
+            mediator.serverRequest1(opponentId);
         });
 
 
