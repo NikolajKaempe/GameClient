@@ -118,6 +118,7 @@ public class GuiTicTacToeController implements Initializable {
         btn_1.setOnAction(event -> {
             if(myTurn && boardValues[0]==0){
                 mediator.makeMove(0);
+                System.out.println("Click!!");
             }
         });
         btn_2.setOnAction(event -> {
@@ -192,8 +193,8 @@ public class GuiTicTacToeController implements Initializable {
         String[] positionValues = gameBody.split("\\.");
 
         for (int i = 0; i < positionValues.length; i++) {
-            int value = (int) positionValues[i].charAt(2);
-
+            String s = ""+positionValues[i].charAt(2);
+            int value = Integer.parseInt(s);
             if(value == 2) {
                 boardValues[i] = 2;
                 paintButtons(i,2);
@@ -208,6 +209,7 @@ public class GuiTicTacToeController implements Initializable {
             }
 
         }
+
     }
 
 

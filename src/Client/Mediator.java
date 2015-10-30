@@ -246,14 +246,16 @@ public class Mediator extends Application
 
          System.out.println(message);
 
-         Platform.runLater(new Runnable() {
+         if (!inGame)
+         {
+             Platform.runLater(new Runnable() {
 
-             public void run() {
-                 activateGameGui(tempInfo[2], tempInfo[1], tempInfo[0]);
-             }
-         });
+                 public void run() {
+                     activateGameGui(tempInfo[2], tempInfo[1], tempInfo[0]);
+                 }
+             });
 
-
+         }
 
      }
 
@@ -273,8 +275,6 @@ public class Mediator extends Application
                 alert.setContentText("Player "+ findUsername(message) +" have declined your invite.");
                 alert.showAndWait();
 
-
-
         }
         });
     }
@@ -282,11 +282,13 @@ public class Mediator extends Application
     public void serverRequest11(String message) {
 
         System.out.println("REQUEST 11");
+        System.out.println("message = " + message);
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 guiTicTacToeController.updateGameBoard(message);
+                inGame = true;
             }
         });
 
@@ -294,6 +296,7 @@ public class Mediator extends Application
 
     public void makeMove(int move)
     {
+        System.out.println("move = " + move);
         String body = ""+move;
         serverConnection.move(body);
     }

@@ -132,7 +132,7 @@ public class ServerConnection extends Thread
     public void move(String body)
     {
         try {
-            outToServer.writeObject("005|"+body);
+            outToServer.writeObject("004|"+body);
         } catch (IOException e) {
             e.printStackTrace();
         }
