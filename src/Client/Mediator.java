@@ -283,7 +283,19 @@ public class Mediator extends Application
 
         System.out.println("REQUEST 11");
 
-        System.out.println(message);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                guiTicTacToeController.updateGameBoard(message);
+            }
+        });
+
+    }
+
+    public void makeMove(int move)
+    {
+        String body = ""+move;
+        serverConnection.move(body);
     }
 
     public void inviteClient(int opponentListID, String gameType)
