@@ -46,8 +46,11 @@ public class StatusListener extends Thread {
                         mediator.serverRequest1(textFromServer[1]);// Forladt spil;
                         break;
                     case "002" : // Vundet
+                        System.out.println("heeeej");
+                        mediator.serverRequest2();
                         break;
-                    case "003" : // tabt ;
+                    case "003" : // tabt
+                        mediator.serverRequest3();
                         break;
                     case "004" : // Træk
                         break;
@@ -69,6 +72,9 @@ public class StatusListener extends Thread {
                         break;
                     case "011" :
                         mediator.serverRequest11(textFromServer[1]);
+                        break;
+                    case "012":
+                        mediator.serverRequest12();
                         break;
                 }
                 //System.out.println(this.isAlive());

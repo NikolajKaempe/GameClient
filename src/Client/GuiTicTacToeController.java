@@ -78,11 +78,13 @@ public class GuiTicTacToeController implements Initializable {
     private String opponentId;
     private String ownId;
     private Boolean myTurn = false;
-    private ArrayList<Button> boardButtons;
+    private Button[] boardButtons = new Button[9];
     private int[] boardValues;
 
     Image image = new Image(getClass().getResourceAsStream("cross.png"));
     Image image2 = new Image(getClass().getResourceAsStream("circle.png"));
+    private boolean gameEnded = false;
+    private byte gameWinningStatus = 0;
 
 
     public GuiTicTacToeController(Stage stage, Mediator mediator, String opponentId, String ownId) {
@@ -90,9 +92,6 @@ public class GuiTicTacToeController implements Initializable {
         this.mediator = mediator;
         this.opponentId = opponentId;
         this.ownId = ownId;
-        System.out.println("opp id : " + opponentId);
-        System.out.println("own id: " + ownId);
-        boardButtons = new ArrayList<Button>();
     }
 
     @Override
@@ -107,64 +106,29 @@ public class GuiTicTacToeController implements Initializable {
 
         imageView_right.setImage(image2);
 
-        boardButtons.add(btn_1);
-        boardButtons.add(btn_2);
-        boardButtons.add(btn_3);
-        boardButtons.add(btn_4);
-        boardButtons.add(btn_5);
-        boardButtons.add(btn_6);
-        boardButtons.add(btn_7);
-        boardButtons.add(btn_8);
-        boardButtons.add(btn_9);
+        boardButtons[0] = btn_1;
+        boardButtons[1] = btn_2;
+        boardButtons[2] = btn_3;
+        boardButtons[3] = btn_4;
+        boardButtons[4] = btn_5;
+        boardButtons[5] = btn_6;
+        boardButtons[6] = btn_7;
+        boardButtons[7] = btn_8;
+        boardButtons[8] = btn_9;
+
+        // Set events on board buttons
+        for(int i = 0; i < boardButtons.length; i++) {
+
+            final int finalI = i;
+
+            boardButtons[i].setOnAction(e -> {
+                if(myTurn && boardValues[finalI]==0){
+                    mediator.makeMove(finalI);
+                }
+            });
 
 
-
-        btn_1.setOnAction(event -> {
-            if(myTurn && boardValues[0]==0){
-                mediator.makeMove(0);
-                System.out.println("Click!!");
-            }
-        });
-        btn_2.setOnAction(event -> {
-            if(myTurn && boardValues[1]==0){
-                mediator.makeMove(1);
-            }
-        });
-        btn_3.setOnAction(event -> {
-            if(myTurn && boardValues[2]==0){
-                mediator.makeMove(2);
-            }
-        });
-        btn_4.setOnAction(event -> {
-            if(myTurn && boardValues[3]==0){
-                mediator.makeMove(3);
-            }
-        });
-        btn_5.setOnAction(event -> {
-            if(myTurn && boardValues[4]==0){
-                mediator.makeMove(4);
-            }
-        });
-        btn_6.setOnAction(event -> {
-            if(myTurn && boardValues[5]==0){
-                mediator.makeMove(5);
-            }
-        });
-        btn_7.setOnAction(event -> {
-            if(myTurn && boardValues[6]==0){
-                mediator.makeMove(6);
-            }
-        });
-        btn_8.setOnAction(event -> {
-            if(myTurn && boardValues[7]==0){
-                mediator.makeMove(7);
-            }
-        });
-        btn_9.setOnAction(event -> {
-            if(myTurn && boardValues[8]==0){
-                mediator.makeMove(8);
-            }
-        });
+        }
 
         btn_playAgain.setOnAction(event -> {
 
@@ -192,10 +156,13 @@ public class GuiTicTacToeController implements Initializable {
         String turnID = input[0];
         String gameBody = input[1];
 
-        if (turnID.equals(ownId)) {
+
+        if (turnID.equals(ownId) && !gameEnded) {
             myTurn = true;
+            label_whosTurn.setText("It's your turn!");
         } else {
             myTurn = false;
+            label_whosTurn.setText("It's your opponents turn!");
         }
 
         String[] positionValues = gameBody.split("\\.");
@@ -218,6 +185,40 @@ public class GuiTicTacToeController implements Initializable {
 
         }
 
+        if( !gameEnded ) return;
+
+        switch(gameWinningStatus) {
+            case 1:
+                label_whosTurn.setText("Congratulations, you've won!");
+                break;
+            case 2:
+                label_whosTurn.setText("Sorry, you lost!");
+                break;
+            case 3:
+                label_whosTurn.setText("It's a draw!");
+        }
+
+    }
+
+    public void win() {
+        Platform.runLater(() -> {
+            gameEnded = true;
+            gameWinningStatus = 1;
+        });
+    }
+
+    public void lose() {
+        Platform.runLater(() -> {
+            gameEnded = true;
+            gameWinningStatus = 2;
+        });
+    }
+
+    public void draw() {
+        Platform.runLater(() -> {
+            gameEnded = true;
+            gameWinningStatus = 3;
+        });
     }
 
 
@@ -229,16 +230,14 @@ public class GuiTicTacToeController implements Initializable {
     private void paintButtons(int btn, int type) {
 
         if (type == 1) {
-            boardButtons.get(btn).setGraphic(new ImageView(image));
+            boardButtons[btn].setGraphic(new ImageView(image));
 
         } else if (type == 2) {
-            boardButtons.get(btn).setGraphic(new ImageView(image2));
+            boardButtons[btn].setGraphic(new ImageView(image2));
         } else {
             // do nothing
         }
 
     }
-
-
 
 }
